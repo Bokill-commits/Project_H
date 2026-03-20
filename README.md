@@ -3,6 +3,10 @@
 실시간 영상에서 사람을 탐지하고 행동(run / walk / stand)을 인식하는 딥러닝 파이프라인입니다.
 
 ---
+<a href="본인의_유튜브_영상_링크" target="_blank">
+  <img src="https://img.shields.io/badge/Youtube-Project__H-red?logo=youtube&logoColor=white" alt="Youtube">
+</a>
+<br>
 학습모델 테스트 영상<br>
 [![Youtube](https://img.shields.io/badge/Youtube-Project__H-red?logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiDlLY&index=1)
 
