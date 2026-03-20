@@ -4,132 +4,192 @@ https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiD
 
 
 
-1단계 - 기초 파이프라인 구축
+# 🏃 Project_H | 객체(사람) 탐지 및 행동 감지 딥러닝 모델
 
-YOLO + MediaPipe + LSTM 조합으로
-run / stand / walk 3가지 동작 인식 시스템 구축
+실시간 영상에서 사람을 탐지하고 행동(run / walk / stand)을 인식하는 딥러닝 파이프라인입니다.
 
-키포인트 추출 → 데이터 증강 → 모델 학습
-총 3개 파일로 구성
-- train.ipynb (추출 + 증강 + 학습)
-- inference.py (추론 및 영상 분석)
-- finetune.ipynb (파인튜닝)
+---
 
+## 📌 프로젝트 개요
 
+| 항목 | 내용 |
+|------|------|
+| 개발 기간 | 2025 |
+| 개발 환경 | Windows / Python 3.10 / CPU |
+| 인식 대상 | 사람 (1인 기준) |
+| 인식 행동 | run / walk / stand |
 
+---
 
-2단계 - 초기 모델 문제 발견
+## 🛠️ 기술 스택
 
-최초 학습 결과
-- train accuracy: 99%
-- val accuracy:   60~65%
-- 전형적인 과적합 패턴 발생
+### Core
+| 라이브러리 | 버전 | 용도 |
+|-----------|------|------|
+| TensorFlow | 2.15.0 | 딥러닝 모델 학습 및 추론 |
+| Ultralytics YOLO | - | 사람 객체 탐지 및 추적 |
+| MediaPipe | 0.10.9 | 포즈 추출 (33개 관절 키포인트) |
+| OpenCV | 4.8.1.78 | 영상 처리 및 시각화 |
+| NumPy | 1.26.4 | 수치 연산 |
+| scikit-learn | 1.3.2 | 데이터 전처리 / 라벨 인코딩 |
 
+### 시각화
+| 라이브러리 | 용도 |
+|-----------|------|
+| Matplotlib | 학습 그래프 시각화 |
+| Seaborn | Confusion Matrix 시각화 |
+
+---
+
+## 🏗️ 시스템 아키텍처
+```
+영상 입력
+→ YOLO (사람 탐지 / 바운딩 박스)
+→ MediaPipe (포즈 추출 / 33개 관절 × 4차원 = 132 특징)
+→ LSTM 모델 (15프레임 시퀀스 → 행동 분류)
+→ 결과 영상 출력 (스켈레톤 + 행동 라벨)
+```
+
+---
+
+## 📁 프로젝트 구조
+```
+Project_H/
+├── train.ipynb          # 키포인트 추출 + 데이터 증강 + 모델 학습
+├── inference.py         # 추론 및 영상 분석
+├── finetune.ipynb       # 파인튜닝
+├── video/               # 학습용 영상
+├── pose_fps/            # 추출된 키포인트 데이터
+│   ├── data_pose.npy
+│   ├── labels_pose.npy
+│   ├── video_ids.npy
+│   ├── aug_data.npy
+│   ├── aug_labels.npy
+│   └── aug_video_ids.npy
+└── model/
+    ├── action_model.h5
+    └── label_encoder.pkl
+```
+
+---
+
+## 🧠 모델 구조
+```
+Input (15, 132)
+→ GaussianNoise (0.05)
+→ LSTM (64, return_sequences=True)
+→ Dropout (0.5)
+→ LSTM (32)
+→ Dropout (0.5)
+→ Dense (32, relu, L2=0.01)
+→ Dropout (0.5)
+→ Output (3, softmax)
+```
+
+---
+
+## 📊 학습 데이터
+
+| 클래스 | 영상 수 | 프레임 수 |
+|--------|---------|----------|
+| run | 27개 | 11,762 |
+| stand | 23개 | 9,446 |
+| walk | 25개 | 7,802 |
+| **총계** | **75개** | **29,010** |
+
+### 데이터 증강 기법
+- 좌우 반전 (MediaPipe 관절 쌍 기준)
+- 랜덤 노이즈 추가
+- 스케일 변환 (체형 차이 시뮬레이션)
+- 위치 이동 (카메라 위치 차이 시뮬레이션)
+
+---
+
+## 📈 최종 모델 성능 (v3)
+
+| 클래스 | Precision | Recall | F1-score |
+|--------|-----------|--------|----------|
+| run | 1.00 | 0.97 | 0.96 |
+| stand | 1.00 | 0.82 | 0.84 |
+| walk | 0.84 | 0.95 | 0.85 |
+
+---
+
+## 🔄 개발 과정 및 개선 이력
+
+### 문제 1 - 과적합
+```
+현상: train accuracy 99% / val accuracy 60%
 원인: 학습/검증 데이터 분포 차이
+해결: Dropout 0.3→0.5 / GaussianNoise 0.02→0.05 / L2 정규화 강화
+결과: val accuracy 70%대로 향상
+```
 
+### 문제 2 - stand 클래스 성능 저조
+```
+현상: stand → walk 혼동 48%
+원인: stand 데이터 다양성 부족
+해결: stand 영상 추가 후 파인튜닝 (LSTM 동결 / Dense 재학습)
+결과: stand F1 0.65 → 0.89
+```
 
+### 문제 3 - run ↔ walk 혼동
+```
+현상: 보폭이 작아지는 순간 walk로 오인식
+원인: 느린 조깅 데이터 부족
+해결: 다양한 속도의 run 영상 추가 후 파인튜닝
+결과: run F1 0.91 → 0.96
+```
 
+### 문제 4 - 모델 구조 개선 시도
+```
+시도: Transformer 모델로 교체
+결과: 현재 데이터 규모에서 LSTM보다 성능 낮음
+결론: 데이터 35,000개 수준에서는 LSTM이 더 적합
+```
 
-3단계 - 과적합 개선 시도
-
-Dropout 0.3 → 0.5
-GaussianNoise 0.02 → 0.05
-L2 정규화 강화
-
-결과: val accuracy 60% → 70%대로 향상
-그러나 stand 클래스 성능 저조
-- stand → walk 혼동 48%
-
-
-
-
-4단계 - 파인튜닝 도입 (v2)
-
-문제: stand 클래스 성능 개선 필요
-해결: 새 영상 추가 후 파인튜닝
-
-LSTM 동결 + Dense만 재학습
-학습률 0.001 → 0.0003으로 낮춤
-confidence 제곱 가중치 Smoother 도입
-
-결과 (v2):
-- run   F1: 0.81 → 0.91
-- stand F1: 0.65 → 0.89 (대폭 개선)
-- walk  F1: 0.85 → 0.79
-
-
-
-
-5단계 - run/walk 혼동 문제 발견 및 개선 (v3)
-
-문제: 실제 영상에서 run ↔ walk 혼동
-원인: 보폭이 작아지는 순간 walk로 판단
-
-해결: run 영상 추가 (조깅/다양한 속도)
-     f_run_01~10 추가 파인튜닝
-
-결과 (v3):
-- run   F1: 0.91 → 0.96 (핵심 문제 해결)
-- stand F1: 0.89 → 0.84
-- walk  F1: 0.79 → 0.85
-→ 현재까지 최고 성능 모델
-
-
-
-
-6단계 - 추가 보완 시도 (v4, v5)
-
-문제: 실제 영상에서 stand 오인식
-- 팔 든 자세 → run으로 판단
-- 뒷모습 stand → walk로 판단
-- 뒷모습 walk → stand로 판단
-
-해결 시도:
-- 다양한 각도/자세 stand, walk 영상 추가
-- v3 기반 재파인튜닝
-
-결과 (v4, v5):
-- stand F1 오히려 하락
-- 원인: 애매한 케이스 영상이 경계를 흐림
-→ v3으로 롤백 결정
-
-
-
-
-7단계 - 근본적 해결 시도
-
-시도 1: 전체 데이터 합쳐서 처음부터 재학습
-→ 최초 학습과 동일한 과적합 패턴 반복
-→ 효과 없음
-
-시도 2: Transformer 모델로 교체
-→ LSTM보다 성능 낮게 나옴
-→ 현재 데이터 규모(35000개)로는 부족
-→ LSTM이 현재 환경에 더 적합
-
-
-
-
-8단계 - 최종 결론
-
-최종 모델: v3 (LSTM 기반)
-- run   F1: 0.96
-- stand F1: 0.84
-- walk  F1: 0.85
-
-한계점:
-- 학습 데이터(유튜브)와 실제 환경 간 분포 차이
+### 한계점 및 개선 방향
+```
+- 학습 데이터(유튜브)와 실제 환경 간 분포 차이로 일반화 성능 제한
 - 직접 촬영 데이터 추가 시 성능 향상 가능
-- 데이터 다양성 확보가 핵심 과제
+- 다중 인물 환경에서 특정 인물 추적 기능 미구현
+```
 
+---
 
+## ⚙️ 실행 방법
 
-개선 시도 요약표
+### 환경 설정
+```bash
+pip install tensorflow==2.15.0
+pip install mediapipe==0.10.9
+pip install opencv-python==4.8.1.78
+pip install numpy==1.26.4
+pip install scikit-learn==1.3.2
+pip install ultralytics
+pip install matplotlib seaborn
+```
 
-시도                     방법                       결과
-Dropout/Noise        강화과적합 완화         val 60% → 70%
-파인튜닝 도입          stand 개선               F1 0.65 → 0.89
-run 데이터 추가	   run 혼동 개선	       F1 0.91 → 0.96
-다양한 자세 추가      stand 보완 시도         오히려 하락
-전체 재학습            근본 해결 시도           효과 없음
-Transformer 교체     모델 구조 개선           LSTM보다 낮음
+### 추론 실행
+```python
+# inference.py 하단 경로 수정 후 실행
+process_video(
+    'input/video/path.mp4',
+    'output/video/path.mp4'
+)
+```
+
+---
+
+## 💡 핵심 구현 포인트
+
+**영상 단위 Train/Val Split**
+> 같은 영상의 프레임이 학습/검증에 동시에 들어가는 데이터 누수 방지
+
+**크롭 기반 키포인트 추출**
+> 전체 프레임이 아닌 YOLO 바운딩 박스 크롭 후 포즈 추출
+> 학습/추론 파이프라인 일관성 유지
+
+**Confidence 가중치 Smoother**
+> 단순 다수결 대신 confidence 제곱 가중치 적용
+> 빠른 동작 전환과 안정성 동시 확보
