@@ -1,5 +1,6 @@
 # 프로젝트 개발 과정
 
+https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiDlLY&index=1
 
 
 
