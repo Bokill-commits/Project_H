@@ -1,8 +1,4 @@
-# 프로젝트 개발 과정
-
 https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiDlLY&index=1
-
-
 
 # 🏃 Project_H | 객체(사람) 탐지 및 행동 감지 딥러닝 모델
 
@@ -14,7 +10,7 @@ https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiD
 
 | 항목 | 내용 |
 |------|------|
-| 개발 기간 | 2025 |
+| 개발 기간 | 2주 |
 | 개발 환경 | Windows / Python 3.10 / CPU |
 | 인식 대상 | 사람 (1인 기준) |
 | 인식 행동 | run / walk / stand |
@@ -27,7 +23,7 @@ https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiD
 | 라이브러리 | 버전 | 용도 |
 |-----------|------|------|
 | TensorFlow | 2.15.0 | 딥러닝 모델 학습 및 추론 |
-| Ultralytics YOLO | - | 사람 객체 탐지 및 추적 |
+| Ultralytics YOLO | yolo11n | 사람 객체 탐지 및 추적 |
 | MediaPipe | 0.10.9 | 포즈 추출 (33개 관절 키포인트) |
 | OpenCV | 4.8.1.78 | 영상 처리 및 시각화 |
 | NumPy | 1.26.4 | 수치 연산 |
@@ -66,7 +62,7 @@ Project_H/
 │   ├── aug_data.npy
 │   ├── aug_labels.npy
 │   └── aug_video_ids.npy
-└── model/
+└── model/               # 학습모델
     ├── action_model.h5
     └── label_encoder.pkl
 ```
@@ -86,6 +82,14 @@ Input (15, 132)
 → Output (3, softmax)
 ```
 
+### 파인튜닝 전략 (v3)
+```
+베이스 모델 (v2) 로드
+→ LSTM 레이어 동결 (기존 가중치 보존)
+→ Dense 레이어만 재학습
+→ 학습률 0.001 → 0.0003으로 낮춰 안정적 파인튜닝
+→ 새 데이터 패턴 반영하면서 기존 성능 유지
+```
 ---
 
 ## 📊 학습 데이터
