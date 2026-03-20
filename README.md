@@ -1,10 +1,9 @@
-https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiDlLY&index=1
-
 # 🏃 Project_H | 객체(사람) 탐지 및 행동 감지 딥러닝 모델
 
 실시간 영상에서 사람을 탐지하고 행동(run / walk / stand)을 인식하는 딥러닝 파이프라인입니다.
 
 ---
+학습모델 테스트 영상 [![Youtube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=XI06PPNJSdU&list=PLBjBkI2yDmWm05fRU3HrfWYcSWnsiDlLY&index=1)
 
 ## 📌 프로젝트 개요
 
