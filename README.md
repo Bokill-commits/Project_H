@@ -27,7 +27,7 @@
 | 툴 | 용도 |
 |----|------|
 | Jupyter Notebook | 데이터 분석 및 모델 학습 |
-| Anaconda | 가상환경 및 패키지 관리 |
+| Anaconda Prompt | 가상환경 및 패키지 관리 |
 
 ### Core
 | 라이브러리 | 버전 | 용도 |
