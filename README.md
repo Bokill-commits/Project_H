@@ -132,6 +132,7 @@ Input (15, 132)
 <img src="images/1.png" width="700" alt="학습 곡선">
 <img src="images/2.png" width="500" alt="혼동 행렬">
 <img src="images/3.png" width="500" alt="막대 그래프">
+
 | 클래스 | Precision | Recall | F1-score |
 |--------|-----------|--------|----------|
 | run | 1.00 | 0.97 | 0.96 |
