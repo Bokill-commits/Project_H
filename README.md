@@ -129,15 +129,15 @@ Input (15, 132)
 
 ## 📈 최종 모델 성능 (v3)
 
+<img src="images/1.png" width="700" alt="학습 곡선">
+<img src="images/2.png" width="500" alt="혼동 행렬">
+<img src="images/3.png" width="500" alt="막대 그래프">
 | 클래스 | Precision | Recall | F1-score |
 |--------|-----------|--------|----------|
 | run | 1.00 | 0.97 | 0.96 |
 | stand | 1.00 | 0.82 | 0.84 |
 | walk | 0.84 | 0.95 | 0.85 |
 
-<img src="images/1.png" width="500" alt="설명">
-<img src="images/2.png" width="500" alt="설명">
-<img src="images/3.png" width="500" alt="설명">
 ---
 
 ## 🔄 개발 과정 및 개선 이력
