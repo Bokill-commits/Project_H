@@ -134,7 +134,7 @@ Input (15, 132)
 <img src="images/1.png" width="700" alt="학습 곡선">
 
 <h3>🟦 혼동 행렬</h3>
-<img src="images/2.png" width="500" alt="혼동 행렬">
+<img src="images/2.png" width="400" alt="혼동 행렬">
 
 <h3>📊 막대 그래프</h3>
 <img src="images/3.png" width="500" alt="막대 그래프">
