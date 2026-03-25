@@ -129,15 +129,25 @@ Input (15, 132)
 
 ## 📈 최종 모델 성능 (v3)
 
+<h3>📈 학습 곡선</h3>
 <img src="images/1.png" width="700" alt="학습 곡선">
+
+<h3>🟦 혼동 행렬</h3>
 <img src="images/2.png" width="500" alt="혼동 행렬">
+
+<h3>📊 막대 그래프</h3>
 <img src="images/3.png" width="500" alt="막대 그래프">
+
+<details>
+<summary>📋 막대 그래프 수치</summary>
 
 | 클래스 | Precision | Recall | F1-score |
 |--------|-----------|--------|----------|
-| run | 1.00 | 0.97 | 0.96 |
-| stand | 1.00 | 0.82 | 0.84 |
-| walk | 0.84 | 0.95 | 0.85 |
+| run    | 1.00      | 0.97   | 0.96     |
+| stand  | 1.00      | 0.82   | 0.84     |
+| walk   | 0.84      | 0.95   | 0.85     |
+
+</details>
 
 ---
 
