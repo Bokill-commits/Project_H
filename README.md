@@ -73,6 +73,7 @@ Project_H/
 ├── inference.py         # 추론 및 영상 분석
 ├── finetune.ipynb       # 파인튜닝
 ├── video/               # 학습용 영상
+├── images/              # 모델 성능 시각화 그래프
 ├── pose_fps/            # 추출된 키포인트 데이터
 │   ├── data_pose.npy
 │   ├── labels_pose.npy
