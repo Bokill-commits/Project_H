@@ -134,7 +134,8 @@ Input (15, 132)
 | run | 1.00 | 0.97 | 0.96 |
 | stand | 1.00 | 0.82 | 0.84 |
 | walk | 0.84 | 0.95 | 0.85 |
-![설명](.github/images/1.png)
+
+<img src="images/1.png" width="500" alt="설명">
 ---
 
 ## 🔄 개발 과정 및 개선 이력
