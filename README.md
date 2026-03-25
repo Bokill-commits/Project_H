@@ -136,6 +136,8 @@ Input (15, 132)
 | walk | 0.84 | 0.95 | 0.85 |
 
 <img src="images/1.png" width="500" alt="설명">
+<img src="images/2.png" width="500" alt="설명">
+<img src="images/3.png" width="500" alt="설명">
 ---
 
 ## 🔄 개발 과정 및 개선 이력
